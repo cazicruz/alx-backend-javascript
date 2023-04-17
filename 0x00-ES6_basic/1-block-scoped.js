@@ -1,10 +1,6 @@
-#!/bin/js
-
 export default function taskBlock(trueOrFalse) {
-  const task = false;
-  const task2 = true;
-
-	/* converted the var declerations to let */
+  var task = false;
+  var task2 = true;
 
   if (trueOrFalse) {
     let task = true;
