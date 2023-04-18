@@ -3,4 +3,5 @@ export default function returnHowManyArguments(...args) {
   for (let i in args){
     numOfArgs += 1;
   }
+  return numOfArgs;
 }
