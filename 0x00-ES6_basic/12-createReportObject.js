@@ -1,4 +1,4 @@
 export default function createReportObject(employeesList) {
-  let obj = {[`{allEmployees}`]: [...employeesList]};
+  const obj = {allEmployees: [...employeesList]};
   return obj
 }
