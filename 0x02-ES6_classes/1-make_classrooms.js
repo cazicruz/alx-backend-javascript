@@ -4,8 +4,8 @@ export default initializeRooms(){
   lists[19,20,34];
   value = [];
   for(list of lists){
-    class1 = new Classroom(list)
-    value.append(class1._maxStudentsSize});
+    list = new Classroom(list)
+    value.append(list instanceof Classroom);
   }
   return [value];
 }
