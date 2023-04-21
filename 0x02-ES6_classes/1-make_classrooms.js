@@ -1,6 +1,6 @@
 import ClassRoom from ./0-classroom.js
 
-export default initializeRooms(){
+export default function initializeRooms(){
   lists[19,20,34];
   value = [];
   for(list of lists){
