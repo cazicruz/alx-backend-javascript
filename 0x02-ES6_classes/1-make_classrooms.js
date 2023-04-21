@@ -1,11 +1,11 @@
 import ClassRoom from ./0-classroom.js
 
 export default function initializeRooms(){
-  lists[19,20,34];
+  lists = [19,20,34];
   value = [];
   for(list of lists){
     list = new ClassRoom(list)
-    value.append(list);
+    value.push(list);
   }
   return [value];
 }
