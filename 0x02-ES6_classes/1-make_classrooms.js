@@ -4,7 +4,7 @@ export default function initializeRooms(){
   lists[19,20,34];
   value = [];
   for(list of lists){
-    list = new Classroom(list)
+    list = new ClassRoom(list)
     value.append(list);
   }
   return [value];
