@@ -5,7 +5,7 @@ export default initializeRooms(){
   value = [];
   for(list of lists){
     list = new Classroom(list)
-    value.append(list instanceof Classroom);
+    value.append(list);
   }
   return [value];
 }
