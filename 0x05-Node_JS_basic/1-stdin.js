@@ -9,7 +9,7 @@ const rl = readline.createInterface({
 
 console.log("Welcome to Holberton School, what is your name?");
 
-// waiting for inpute
+// waiting for input
 rl.on('line', (input)=>{console.log(`Your name is:`, input)});
 
 // listen for closing
