@@ -7,16 +7,13 @@ const fs = require('fs');
  */
 
 function countStudents(path){
-    let students_data = []
-    let fields = []
-    let study = []
     const students = {}
     return new Promise((resolve, reject) => {
         fs.readFile(path, 'utf8', (err, data) => {
             if (err) {
-                reject(Error('Cannot load the database'));
+                reject(new Error('Cannot load the database'));
             }
-            else {
+            if (data) {
                 const lines = data.split('\n');
                 let students_data = [];
                 let fields = [];
