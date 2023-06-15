@@ -1,13 +1,13 @@
-const fs = require('fs');
+const http = require('http');
+const { url } = require('inspector');
 
-/**
- * Counts the students in a CSV data file.
- * @param {String} dataPath The path to the CSV data file.
- * @author Onwuli David <https://github.com/cazicruz>
- */
+const DB_FILE = process.argv.length > 2 ? process.argv[2] : '';
+// countstudents function
+const fs = require('fs');
 
 function countStudents(path){
     const students = {}
+    const result =[];
     return new Promise((resolve, reject) => {
         fs.readFile(path, 'utf8', (err, data) => {
             if (err) {
@@ -48,18 +48,48 @@ function countStudents(path){
                 //console.log(study)
                 //console.log(students)
                 NUMBER_OF_STUDENTS = Object.keys(students).length
-                console.log(`Number of students: ${NUMBER_OF_STUDENTS}`)
+                result.push(`Number of students: ${NUMBER_OF_STUDENTS}`)
                 //console.log(students_data)
                 for (const course in study){
                         if (course){
-                            console.log(`Number of students in ${course}: ${study[course].length}. List: ${study[course].join(', ')}`)
+                            result.push(`Number of students in ${course}: ${study[course].length}. List: ${study[course].join(', ')}`)
                         }
                 }
             }
-            resolve(students);
+            resolve(result.join('\n'));
         });
         });
 
 };
+// http Server section
+app = http.createServer((req, res) => {
+    res.writeHead(200, {'Content-Type': 'text/plain'});
 
-module.exports = countStudents;
+    const url = req.url;
+    
+    if (url === '/') {
+        res.end('Hello Holberton School!');
+    }
+    else if ((url === '/students') || (url === '/students/')){
+        const output=['This is the list of our students\n'];
+        countStudents(DB_FILE)
+            .then((result) => {
+                output.push(result);
+                const outputtext = output.join('\n');
+                res.writeHead(200, {'Content-Type': 'text/plain'});
+                res.write(Buffer.from(outputtext));
+                res.end();
+            })
+            .catch((error) => {
+                res.end(error.message);
+            });
+    }
+});
+
+const port = 1245;
+app.listen(port, () => {
+    console.log(`app listening at http://localhost:${port}`);
+});
+
+
+module.exports = app;

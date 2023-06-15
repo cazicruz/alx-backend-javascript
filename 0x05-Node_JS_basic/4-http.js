@@ -1,20 +1,27 @@
+/* eslint-disable */
+// 4-http.js
+/** const express = require('express');
+const app = express();
+const port = 1245;
+
+app.get('/*', (req, res) => {
+    res.send('Hello Holberton School!');
+});
+
+app.listen(port, () => {
+    console.log(`app listening at http://localhost:${port}`);
+}
+);*/
 const http = require('http');
-
-const PORT = 1245;
-const HOST = 'localhost';
-const app = http.createServer();
-
-app.on('request', (_, res) => {
-  const responseText = 'Hello Holberton School!';
-
-  res.setHeader('Content-Type', 'text/plain');
-  res.setHeader('Content-Length', responseText.length);
-  res.statusCode = 200;
-  res.write(Buffer.from(responseText));
+app = http.createServer((req, res) => {
+    res.writeHead(200, {'Content-Type': 'text/plain'});
+    res.end('Hello Holberton School!');
 });
 
-app.listen(PORT, HOST, () => {
-  process.stdout.write(`Server listening at -> http://${HOST}:${PORT}\n`);
+const port = 1245;
+app.listen(port, () => {
+    console.log(`app listening at http://localhost:${port}`);
 });
+
 
 module.exports = app;

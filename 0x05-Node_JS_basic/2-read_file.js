@@ -17,7 +17,9 @@ function countStudents(path){
         let db = {}
         fields = lines[0].split(',')
         for (const line of lines.slice(1)){
-            students_data.push(line.split(','));
+            if (line != ""){
+                students_data.push(line.split(','));
+            }
         };
         // converted the .cvs file into a list of objects
         for (i=0; i<students_data.length; i++) {
