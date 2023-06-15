@@ -1,66 +1,42 @@
-/* eslint-disable */
-const fs = require('fs');
+const { readFile } = require('fs');
 
-/**
- * Counts the students in a CSV data file.
- * @param {String} dataPath The path to the CSV data file.
- * @author Onwuli David <https://github.com/cazicruz>
- */
-
-function countStudents(path){
-    const students = {}
-    return new Promise((resolve, reject) => {
-        fs.readFile(path, 'utf8', (err, data) => {
-            if (err) {
-                reject(new Error('Cannot load the database'));
+function countStudents(fileName) {
+  const students = {};
+  const fields = {};
+  let length = 0;
+  return new Promise((resolve, reject) => {
+    readFile(fileName, (error, data) => {
+      if (error) {
+        reject(Error('Cannot load the database'));
+      } else {
+        const lines = data.toString().split('\n');
+        for (let i = 0; i < lines.length; i += 1) {
+          if (lines[i]) {
+            length += 1;
+            const field = lines[i].toString().split(',');
+            if (Object.prototype.hasOwnProperty.call(students, field[3])) {
+              students[field[3]].push(field[0]);
+            } else {
+              students[field[3]] = [field[0]];
             }
-            if (data) {
-                const lines = data.split('\n');
-                let students_data = [];
-                let fields = [];
-                let study = [];
-                const students = {};
-                fields = lines[0].split(',');
-
-                for (const line of lines.slice(1)){
-                    if (line != ""){
-                        students_data.push(line.split(','));
-                    }
-                };
-                //console.log(students_data)
-                //console.log(fields)
-
-                // converted the .cvs file into a list of objects with index
-                for (i=0; i<students_data.length; i++) {
-                    students[i] = []
-                    let course = students_data[i][3]
-                    let firstname = students_data[i][0]
-                    if (course in study){
-                        study[course].push(firstname)
-                    } else {
-                        study[course] = [firstname]
-                    }
-                    for (j=0; j<fields.length; j++) {
-                        const students1 = {}
-                        students1[fields[j]] = students_data[i][j];
-                        students[i].push(students1)
-                    }
-                }
-                //console.log(study)
-                //console.log(students)
-                NUMBER_OF_STUDENTS = Object.keys(students).length
-                console.log(`Number of students: ${NUMBER_OF_STUDENTS}`)
-                //console.log(students_data)
-                for (const course in study){
-                        if (course){
-                            console.log(`Number of students in ${course}: ${study[course].length}. List: ${study[course].join(', ')}`)
-                        }
-                }
+            if (Object.prototype.hasOwnProperty.call(fields, field[3])) {
+              fields[field[3]] += 1;
+            } else {
+              fields[field[3]] = 1;
             }
-            resolve(students);
-        });
-        });
-
-};
+          }
+        }
+        const l = length - 1;
+        console.log(`Number of students: ${l}`);
+        for (const [key, value] of Object.entries(fields)) {
+          if (key !== 'field') {
+            console.log(`Number of students in ${key}: ${value}. List: ${students[key].join(', ')}`);
+          }
+        }
+        resolve(data);
+      }
+    });
+  });
+}
 
 module.exports = countStudents;

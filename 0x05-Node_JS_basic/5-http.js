@@ -1,96 +1,70 @@
-/* eslint-disable */
 const http = require('http');
-const { url } = require('inspector');
+const { readFile } = require('fs');
 
-const DB_FILE = process.argv.length > 2 ? process.argv[2] : '';
-// countstudents function
-const fs = require('fs');
-
-function countStudents(path){
-    const students = {}
-    const result =[];
-    return new Promise((resolve, reject) => {
-        fs.readFile(path, 'utf8', (err, data) => {
-            if (err) {
-                reject(new Error('Cannot load the database'));
-            }
-            if (data) {
-                const lines = data.split('\n');
-                let students_data = [];
-                let fields = [];
-                let study = [];
-                const students = {};
-                fields = lines[0].split(',');
-
-                for (const line of lines.slice(1)){
-                    if (line != ""){
-                        students_data.push(line.split(','));
-                    }
-                };
-                //console.log(students_data)
-                //console.log(fields)
-
-                // converted the .cvs file into a list of objects with index
-                for (i=0; i<students_data.length; i++) {
-                    students[i] = []
-                    let course = students_data[i][3]
-                    let firstname = students_data[i][0]
-                    if (course in study){
-                        study[course].push(firstname)
-                    } else {
-                        study[course] = [firstname]
-                    }
-                    for (j=0; j<fields.length; j++) {
-                        const students1 = {}
-                        students1[fields[j]] = students_data[i][j];
-                        students[i].push(students1)
-                    }
-                }
-                //console.log(study)
-                //console.log(students)
-                NUMBER_OF_STUDENTS = Object.keys(students).length
-                result.push(`Number of students: ${NUMBER_OF_STUDENTS}`)
-                //console.log(students_data)
-                for (const course in study){
-                        if (course){
-                            result.push(`Number of students in ${course}: ${study[course].length}. List: ${study[course].join(', ')}`)
-                        }
-                }
-            }
-            resolve(result.join('\n'));
-        });
-        });
-
-};
-// http Server section
-app = http.createServer((req, res) => {
-    res.writeHead(200, {'Content-Type': 'text/plain'});
-
-    const url = req.url;
-    
-    if (url === '/') {
-        res.end('Hello Holberton School!');
-    }
-    else if ((url === '/students') || (url === '/students/')){
-        const output=['This is the list of our students\n'];
-        countStudents(DB_FILE)
-            .then((result) => {
-                output.push(result);
-                const outputtext = output.join('\n');
-                res.writeHead(200, {'Content-Type': 'text/plain'});
-                res.write(Buffer.from(outputtext));
-                res.end();
-            })
-            .catch((error) => {
-                res.end(error.message);
-            });
-    }
-});
-
+const hostname = '127.0.0.1';
 const port = 1245;
-app.listen(port, () => {
-    console.log(`app listening at http://localhost:${port}`);
+
+function countStudents(fileName) {
+  const students = {};
+  const fields = {};
+  let length = 0;
+  return new Promise((resolve, reject) => {
+    readFile(fileName, (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        let output = '';
+        const lines = data.toString().split('\n');
+        for (let i = 0; i < lines.length; i += 1) {
+          if (lines[i]) {
+            length += 1;
+            const field = lines[i].toString().split(',');
+            if (Object.prototype.hasOwnProperty.call(students, field[3])) {
+              students[field[3]].push(field[0]);
+            } else {
+              students[field[3]] = [field[0]];
+            }
+            if (Object.prototype.hasOwnProperty.call(fields, field[3])) {
+              fields[field[3]] += 1;
+            } else {
+              fields[field[3]] = 1;
+            }
+          }
+        }
+        const l = length - 1;
+        output += `Number of students: ${l}\n`;
+        for (const [key, value] of Object.entries(fields)) {
+          if (key !== 'field') {
+            output += `Number of students in ${key}: ${value}. `;
+            output += `List: ${students[key].join(', ')}\n`;
+          }
+        }
+        resolve(output);
+      }
+    });
+  });
+}
+
+const app = http.createServer((request, response) => {
+  response.statusCode = 200;
+  response.setHeader('Content-Type', 'text/plain');
+  if (request.url === '/') {
+    response.write('Hello Holberton School!');
+    response.end();
+  }
+  if (request.url === '/students') {
+    response.write('This is the list of our students\n');
+    countStudents(process.argv[2].toString()).then((output) => {
+      const outString = output.slice(0, -1);
+      response.end(outString);
+    }).catch(() => {
+      response.statusCode = 404;
+      response.end('Cannot load the database');
+    });
+  }
 });
 
+app.listen(port, hostname, () => {
+});
 
 module.exports = app;

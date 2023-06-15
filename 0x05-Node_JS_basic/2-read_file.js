@@ -1,85 +1,38 @@
-/* eslint-disable */
 const fs = require('fs');
 
-/**
- * Counts the students in a CSV data file.
- * @param {String} dataPath The path to the CSV data file.
- * @author Onwuli David <https://github.com/cazicruz>
- */
-
-function countStudents(path){
-    let students_data = []
-    let fields = []
-    let study = []
-    const students = {}
-    try {
-        const data = fs.readFileSync(path, 'utf8');
-        const lines = data.split('\n');
-        let db = {}
-        fields = lines[0].split(',')
-        for (const line of lines.slice(1)){
-            if (line != ""){
-                students_data.push(line.split(','));
-            }
-        };
-        // converted the .cvs file into a list of objects
-        for (i=0; i<students_data.length; i++) {
-            students[i] = []
-            let course = students_data[i][3]
-            let firstname = students_data[i][0]
-            if (course in study){
-                study[course].push(firstname)
-            } else {
-                study[course] = [firstname]
-            }
-            for (j=0; j<fields.length; j++) {
-                const students1 = {}
-                students1[fields[j]] = students_data[i][j];
-                students[i].push(students1)
-            }
+function countStudents(fileName) {
+  const students = {};
+  const fields = {};
+  let length = 0;
+  try {
+    const fileContents = fs.readFileSync(fileName, 'utf-8');
+    const lines = fileContents.toString().split('\n');
+    for (let i = 0; i < lines.length; i += 1) {
+      if (lines[i]) {
+        length += 1;
+        const field = lines[i].toString().split(',');
+        if (Object.prototype.hasOwnProperty.call(students, field[3])) {
+          students[field[3]].push(field[0]);
+        } else {
+          students[field[3]] = [field[0]];
         }
-        //console.log(study)
-        NUMBER_OF_STUDENTS = Object.keys(students).length
-        console.log(`Number of students: ${NUMBER_OF_STUDENTS}`)
-        //console.log(students_data)
-        for (const course in study){
-            if (course){
-                console.log(`Number of students in ${course}: ${study[course].length}. List: ${study[course].join(', ')}`)
-            }
+        if (Object.prototype.hasOwnProperty.call(fields, field[3])) {
+          fields[field[3]] += 1;
+        } else {
+          fields[field[3]] = 1;
         }
-        //console.log(students)
-        /*let count = 0;
-        const fields = {};
-        const students = {};
-        for (const line of lines) {
-        if (line !== '') {
-            const student = line.split(',');
-            if (count === 0) {
-            for (const field of student) {
-                fields[field] = count;
-                count += 1;
-            }
-            } else {
-            const firstname = student[fields.firstname];
-            if (!(student[fields.field])) {
-                students[firstname] = [];
-            } else if (students[firstname]) {
-                students[firstname].push(student[fields.field]);
-            } else {
-                students[firstname] = [student[fields.field]];
-            }
-            }
-        }
-        }
-        console.log(`Number of students: ${Object.keys(students).length}`);
-        for (const student in students) {
-        if (student) {
-            console.log(`Number of students in ${student}: ${students[student].length}. List: ${students[student].join(', ')}`);
-        }
-        }*/
-    } catch (err) {
-        throw new Error('Cannot load the database');
+      }
     }
-};
+    const l = length - 1;
+    console.log(`Number of students: ${l}`);
+    for (const [key, value] of Object.entries(fields)) {
+      if (key !== 'field') {
+        console.log(`Number of students in ${key}: ${value}. List: ${students[key].join(', ')}`);
+      }
+    }
+  } catch (error) {
+    throw Error('Cannot load the database');
+  }
+}
 
 module.exports = countStudents;
