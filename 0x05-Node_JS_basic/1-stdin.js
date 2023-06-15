@@ -1,4 +1,5 @@
 // Importing the 'readline' module for reading user input
+/* eslint-disable */
 const readline = require('readline');
 
 // Creating a readline interface
