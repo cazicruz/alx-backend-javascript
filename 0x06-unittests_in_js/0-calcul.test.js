@@ -1,5 +1,5 @@
 const assert = require('assert');
-const calculateNumber = require('./0-calcul').calculateNumber; // Assuming the calculateNumber function is defined in a separate file
+const calculateNumber = require('./0-calcul').calculateNumber;
 
 describe('calculateNumber', () => {
   it('should return the sum of rounded numbers', () => {
