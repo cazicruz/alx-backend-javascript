@@ -17,10 +17,10 @@ describe('calculateNumber', () => {
   describe('type: SUBTRACT', () => {
     it('should return the subtraction of rounded numbers', () => {
       const result1 = calculateNumber('SUBTRACT', 5.5, 2.2);
-      expect(result1).to.equal(-4);
+      expect(result1).to.equal(4);
 
       const result2 = calculateNumber('SUBTRACT', 10.8, 17.2);
-      expect(result2).to.equal(6);
+      expect(result2).to.equal(-6);
     });
   });
 
