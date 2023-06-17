@@ -1,6 +1,6 @@
 const chai = require("chai");
 const expect = chai.expect;
-const calculateNumber = require('./1-calcul').calculateNumber; // Assuming the calculateNumber function is defined in a separate file
+const calculateNumber = require('./1-calcul');
 
 
 describe('calculateNumber', () => {
