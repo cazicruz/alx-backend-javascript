@@ -16,10 +16,10 @@ describe('calculateNumber', () => {
   describe('type: SUBTRACT', () => {
     it('should return the subtraction of rounded numbers', () => {
       const result1 = calculateNumber('SUBTRACT', 5.5, 2.2);
-      assert.strictEqual(result1, -4, `Expected: -4, Actual: ${result1}`);
+      assert.strictEqual(result1, 4, `Expected: 4, Actual: ${result1}`);
 
       const result2 = calculateNumber('SUBTRACT', 10.8, 17.2);
-      assert.strictEqual(result2, 6, `Expected: 6, Actual: ${result2}`);
+      assert.strictEqual(result2, -6, `Expected: -6, Actual: ${result2}`);
     });
   });
 
