@@ -1,5 +1,5 @@
 const assert = require('assert');
-const calculateNumber = require('./1-calcul').calculateNumber; // Assuming the calculateNumber function is defined in a separate file
+const calculateNumber = require('./1-calcul');
 
 
 describe('calculateNumber', () => {
